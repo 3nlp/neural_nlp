@@ -2,12 +2,14 @@
 Computes the BLEU, ROUGE
 using the COCO metrics scripts
 """
-from bleu.bleu import Bleu
-from rouge.rouge import Rouge
+from .bleu.bleu import Bleu
+from .rouge.rouge import Rouge
 import glob
 
 
 def load_textfiles(references, hypothesis):
+
+    """
     hypo = {idx: [lines.strip()] for (idx, lines) in enumerate(hypothesis)}
     # take out newlines before creating dictionary
     raw_refs = [map(str.strip, r) for r in zip(references)]
@@ -15,6 +17,14 @@ def load_textfiles(references, hypothesis):
     # sanity check that we have the same number of references as hypothesis
     if len(hypo) != len(refs):
         raise ValueError("There is a sentence number mismatch between the inputs")
+
+    print(refs)
+    """
+
+    refs = {0: references}
+    hypo = {0: hypothesis}
+
+
     return refs, hypo
 
 
@@ -28,6 +38,10 @@ def __score(ref, hypo):
         (Bleu(4), ["Bleu_1"]),
         (Rouge(), "ROUGE_L"),
     ]
+
+    #print('---')
+    #print(ref)
+
 
     final_scores = {}
     for scorer, method in scorers:
@@ -75,4 +89,4 @@ def test():
         hypothesis =  str(hypothesis[0].strip())
 
         score_map = get_score(reference, hypothesis)
-        print score_map
+        #print score_map
